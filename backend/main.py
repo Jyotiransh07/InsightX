@@ -13,8 +13,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Mount routers under both prefixes so routing succeeds whether /api is forwarded or stripped
 app.include_router(upload.router, prefix="/api/v1")
+app.include_router(upload.router, prefix="/v1")
 
 @app.get("/")
+@app.get("/api")
+@app.get("/api/health")
 def root():
-    return {"message": "InsightX API is running"}
+    return {"message": "InsightX API is running", "status": "ok"}
+
