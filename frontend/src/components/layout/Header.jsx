@@ -98,7 +98,7 @@ const Header = ({ onReset, hasData, onSelectSample, filename }) => {
             FAQs
           </button>
           <a
-            href="http://localhost:8000/docs"
+            href="/api/docs"
             target="_blank"
             rel="noreferrer"
             className="px-4 py-2 rounded-lg text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors flex items-center gap-1.5"

@@ -25,7 +25,7 @@ const UploadScreen = ({ onUploadStart, onUploadSuccess, onUploadError, onSampleS
     formData.append('file', file);
 
     try {
-      const response = await axios.post('http://localhost:8000/api/v1/upload', formData);
+      const response = await axios.post('/api/v1/upload', formData);
       setTimeout(() => onUploadSuccess(response.data), 800);
     } catch (error) {
       onUploadError(error.response?.data?.detail || 'An error occurred while processing the dataset.');
@@ -584,7 +584,7 @@ const Dashboard = () => {
   const handleSampleSelect = async (sampleType) => {
     handleUploadStart();
     try {
-      const response = await axios.get(`http://localhost:8000/api/v1/sample/${sampleType}`);
+      const response = await axios.get(`/api/v1/sample/${sampleType}`);
       setTimeout(() => handleUploadSuccess(response.data), 800);
     } catch (err) {
       handleUploadError("Failed to generate sample dataset analysis.");

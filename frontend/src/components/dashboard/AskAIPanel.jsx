@@ -47,7 +47,7 @@ const AskAIPanel = ({ metadata, analytics }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:8000/api/v1/query', {
+      const response = await axios.post('/api/v1/query', {
         question: q,
         metadata: metadata || {},
         analytics: analytics || {}
