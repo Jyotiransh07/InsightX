@@ -2,9 +2,9 @@ import React, { useState, useMemo } from 'react';
 import { 
   UploadCloud, Sparkles, AlertCircle, Database, ShieldCheck, 
   Target, Activity, CheckCircle2, ArrowRight, FileSpreadsheet, 
-  Layers, BarChart2, PieChart, FileText, Check, Cpu, Filter, 
-  Lock, Zap, HelpCircle, ChevronDown, ChevronUp, Stethoscope, 
-  Users, ShoppingBag, TrendingUp, BarChart3
+  Layers, BarChart2, PieChart, FileText, Check, Filter, Cpu, 
+  HelpCircle, ChevronDown, ChevronUp, Stethoscope, 
+  Users, ShoppingBag, TrendingUp
 } from 'lucide-react';
 import axios from 'axios';
 import Header from '../components/layout/Header';
@@ -125,11 +125,11 @@ const UploadScreen = ({ onUploadStart, onUploadSuccess, onUploadError, onSampleS
 
       {/* Main Headline with larger, bolder typography */}
       <div className="text-center max-w-4xl mx-auto mb-12">
-        <h1 className="hero-headline text-4xl sm:text-6xl font-black tracking-tight leading-[1.12] mb-5 text-black dark:text-white">
-          <span className="block text-black dark:text-white">
+        <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-[1.12] mb-5">
+          <span className="block text-slate-900 dark:text-white drop-shadow-sm mb-1">
             Autonomous Data Intelligence.
           </span>
-          <span className="block text-black dark:text-white">
+          <span className="block bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 bg-clip-text text-transparent pb-1">
             Drop Any Dataset. Discover the Story.
           </span>
         </h1>
@@ -173,38 +173,6 @@ const UploadScreen = ({ onUploadStart, onUploadSuccess, onUploadError, onSampleS
               <span>·</span>
               <span>Verified computations</span>
             </div>
-          </div>
-        </div>
-
-        {/* Security & Capability Badges Strip */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-          <div className="p-3 rounded-xl bg-white/90 border border-slate-200/80 shadow-2xs">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Security</span>
-            <span className="text-sm font-bold text-slate-800 flex items-center justify-center gap-1.5 mt-1">
-              <Lock size={14} className="text-emerald-600" />
-              In-Memory Privacy
-            </span>
-          </div>
-          <div className="p-3 rounded-xl bg-white/90 border border-slate-200/80 shadow-2xs">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Latency</span>
-            <span className="text-sm font-bold text-slate-800 flex items-center justify-center gap-1.5 mt-1">
-              <Zap size={14} className="text-amber-500" />
-              Sub-1.5s Speed
-            </span>
-          </div>
-          <div className="p-3 rounded-xl bg-white/90 border border-slate-200/80 shadow-2xs">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">ML Engines</span>
-            <span className="text-sm font-bold text-slate-800 flex items-center justify-center gap-1.5 mt-1">
-              <Cpu size={14} className="text-blue-600" />
-              K-Means + IQR
-            </span>
-          </div>
-          <div className="p-3 rounded-xl bg-white/90 border border-slate-200/80 shadow-2xs">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Visuals</span>
-            <span className="text-sm font-bold text-slate-800 flex items-center justify-center gap-1.5 mt-1">
-              <BarChart3 size={14} className="text-purple-600" />
-              Recharts Spec
-            </span>
           </div>
         </div>
       </div>
@@ -351,18 +319,18 @@ const UploadScreen = ({ onUploadStart, onUploadSuccess, onUploadError, onSampleS
             >
               <button
                 onClick={() => setExpandedFaq(expandedFaq === idx ? null : idx)}
-                className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 font-bold text-sm sm:text-base text-slate-900 hover:text-blue-600 transition-colors cursor-pointer"
+                className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 font-bold text-sm sm:text-base text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
               >
                 <span>{faq.q}</span>
                 {expandedFaq === idx ? (
-                  <ChevronUp size={18} className="text-blue-600 shrink-0" />
+                  <ChevronUp size={18} className="text-blue-600 dark:text-blue-400 shrink-0" />
                 ) : (
                   <ChevronDown size={18} className="text-slate-400 shrink-0" />
                 )}
               </button>
 
               {expandedFaq === idx && (
-                <div className="px-5 sm:px-6 pb-6 text-sm sm:text-[15px] text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+                <div className="px-5 sm:px-6 pb-6 text-sm sm:text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-4">
                   {faq.a}
                 </div>
               )}
@@ -381,7 +349,7 @@ const ProcessingScreen = () => {
         <div className="w-20 h-20 rounded-full border-4 border-slate-200 border-t-blue-600 animate-spin"></div>
         <Sparkles className="absolute text-blue-600" size={26} />
       </div>
-      <h2 className="text-2xl font-bold text-slate-900 mb-2">Analyzing Dataset...</h2>
+      <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Analyzing Dataset...</h2>
       <p className="text-sm text-slate-500 mb-6">Running automated profiling, data quality audit, and ML modeling</p>
 
       <div className="report-card p-6 bg-white/95 text-left space-y-3.5 text-sm">
@@ -440,7 +408,7 @@ const DashboardView = ({ data, onReset }) => {
               <FileSpreadsheet size={15} className="text-blue-600" />
               <span>Automated Analysis Report · {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
               {filename?.replace(/\.[^/.]+$/, '').replace(/_/g, ' ').toUpperCase() || 'DATASET'} ANALYSIS
             </h1>
             <div className="flex flex-wrap items-center gap-3 mt-2 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
