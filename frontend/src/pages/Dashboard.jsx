@@ -619,18 +619,31 @@ const Dashboard = () => {
         {appState === 'processing' && <ProcessingScreen />}
         {appState === 'dashboard' && data && <DashboardView data={data} onReset={handleReset} />}
         {appState === 'error' && (
-          <div className="max-w-md mx-auto py-24 text-center px-4">
-            <div className="w-18 h-18 rounded-full bg-red-50 text-red-500 flex items-center justify-center mx-auto mb-4 border border-red-100">
-              <AlertCircle size={36} />
+          <div className="max-w-lg mx-auto py-20 text-center px-4">
+            <div className="w-20 h-20 rounded-2xl bg-red-50 dark:bg-red-950/60 text-red-500 dark:text-red-400 flex items-center justify-center mx-auto mb-5 border border-red-100 dark:border-red-900/60 shadow-xs">
+              <AlertCircle size={40} />
             </div>
-            <h3 className="text-2xl font-bold text-slate-900 mb-2">Processing Error</h3>
-            <p className="text-sm text-slate-600 mb-6">{error}</p>
-            <button 
-              onClick={handleReset}
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow-xs transition-colors cursor-pointer"
-            >
-              Try Another File
-            </button>
+            <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mb-3">Processing Error</h3>
+            <div className="p-4 rounded-xl bg-red-50/50 dark:bg-red-950/30 border border-red-200/60 dark:border-red-900/40 text-sm text-red-700 dark:text-red-300 font-medium mb-6 leading-relaxed">
+              {error}
+            </div>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">
+              Ensure your file is a valid CSV, Excel (.xlsx/.xls), TSV, or JSON dataset.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <button 
+                onClick={handleReset}
+                className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow-xs transition-colors cursor-pointer"
+              >
+                Try Another File
+              </button>
+              <button
+                onClick={() => handleSampleSelect('ecommerce')}
+                className="px-5 py-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl text-sm font-bold transition-colors cursor-pointer border border-slate-200 dark:border-slate-700"
+              >
+                Load Sample Dataset
+              </button>
+            </div>
           </div>
         )}
       </main>

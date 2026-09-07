@@ -17,13 +17,13 @@ const DynamicChart = ({ config }) => {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white p-3 rounded-lg shadow-lg border border-slate-200 text-xs z-50">
-          <p className="font-semibold text-slate-800 mb-1">{label || payload[0]?.payload?.name || payload[0]?.payload?.range || ''}</p>
+        <div className="bg-white dark:bg-slate-800 p-3 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 text-xs z-50 backdrop-blur-xs">
+          <p className="font-bold text-slate-800 dark:text-slate-100 mb-1.5">{label || payload[0]?.payload?.name || payload[0]?.payload?.range || ''}</p>
           {payload.map((entry, index) => (
             <div key={index} className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color || color }} />
-              <span className="text-slate-500">{entry.name || 'Value'}:</span>
-              <span className="font-semibold text-slate-900">
+              <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: entry.color || color }} />
+              <span className="text-slate-500 dark:text-slate-400">{entry.name || 'Value'}:</span>
+              <span className="font-bold text-slate-900 dark:text-white">
                 {typeof entry.value === 'number' ? entry.value.toLocaleString(undefined, { maximumFractionDigits: 2 }) : entry.value}
               </span>
             </div>
@@ -173,37 +173,37 @@ const DynamicChart = ({ config }) => {
   const canToggleChartType = ['area', 'line', 'bar', 'histogram'].includes(config.type);
 
   return (
-    <div className={`report-card p-5 bg-white border border-slate-200 rounded-xl shadow-xs ${config.gridArea || 'col-span-12'}`}>
-      <div className="flex flex-wrap items-start justify-between gap-2 mb-4 pb-2 border-b border-slate-100">
+    <div className={`report-card p-5 bg-white dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-2xl shadow-xs transition-colors ${config.gridArea || 'col-span-12'}`}>
+      <div className="flex flex-wrap items-start justify-between gap-2 mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-2.5">
-          <div className="p-1.5 rounded-md bg-slate-50 border border-slate-100">
+          <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700">
             {getIcon()}
           </div>
           <div>
-            <h3 className="text-base font-semibold text-slate-900 dark:text-white tracking-tight">{title}</h3>
-            {subtitle && <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>}
+            <h3 className="text-base font-extrabold text-slate-900 dark:text-white tracking-tight">{title}</h3>
+            {subtitle && <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{subtitle}</p>}
           </div>
         </div>
 
         {/* Interactive Controls Toolbar */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2">
           {canToggleChartType && (
-            <div className="flex items-center bg-slate-100 p-0.5 rounded-md text-[11px] font-medium text-slate-600">
+            <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg text-[11px] font-medium text-slate-600 dark:text-slate-300 border border-slate-200/60 dark:border-slate-700">
               <button
                 onClick={() => setCurrentType('area')}
-                className={`px-2 py-0.5 rounded cursor-pointer transition-colors ${currentType === 'area' ? 'bg-white text-blue-700 shadow-2xs font-semibold' : 'hover:text-slate-900'}`}
+                className={`px-2.5 py-1 rounded-md cursor-pointer transition-all ${currentType === 'area' ? 'bg-white dark:bg-blue-600 text-blue-700 dark:text-white shadow-2xs font-bold' : 'hover:text-slate-900 dark:hover:text-white'}`}
               >
                 Area
               </button>
               <button
                 onClick={() => setCurrentType('bar')}
-                className={`px-2 py-0.5 rounded cursor-pointer transition-colors ${currentType === 'bar' || currentType === 'histogram' ? 'bg-white text-blue-700 shadow-2xs font-semibold' : 'hover:text-slate-900'}`}
+                className={`px-2.5 py-1 rounded-md cursor-pointer transition-all ${currentType === 'bar' || currentType === 'histogram' ? 'bg-white dark:bg-blue-600 text-blue-700 dark:text-white shadow-2xs font-bold' : 'hover:text-slate-900 dark:hover:text-white'}`}
               >
                 Bar
               </button>
               <button
                 onClick={() => setCurrentType('line')}
-                className={`px-2 py-0.5 rounded cursor-pointer transition-colors ${currentType === 'line' ? 'bg-white text-blue-700 shadow-2xs font-semibold' : 'hover:text-slate-900'}`}
+                className={`px-2.5 py-1 rounded-md cursor-pointer transition-all ${currentType === 'line' ? 'bg-white dark:bg-blue-600 text-blue-700 dark:text-white shadow-2xs font-bold' : 'hover:text-slate-900 dark:hover:text-white'}`}
               >
                 Line
               </button>
@@ -213,9 +213,9 @@ const DynamicChart = ({ config }) => {
           <button
             onClick={exportChartData}
             title="Download this chart's data"
-            className="p-1 text-slate-400 hover:text-slate-600 rounded hover:bg-slate-100 transition-colors cursor-pointer"
+            className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer border border-transparent hover:border-slate-200 dark:hover:border-slate-700"
           >
-            <Download size={14} />
+            <Download size={15} />
           </button>
         </div>
       </div>
