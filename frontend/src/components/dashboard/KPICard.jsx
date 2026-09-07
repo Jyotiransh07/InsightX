@@ -3,18 +3,18 @@ import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
 const KPICard = ({ title, value, subValue, trend, trendLabel, icon: Icon, badgeColor }) => {
   return (
-    <div className="report-card p-5 relative overflow-hidden bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow transition-all">
+    <div className="report-card p-5 relative overflow-hidden bg-white dark:bg-slate-900/95 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm hover:shadow transition-all">
       <div className="flex justify-between items-start mb-3">
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">{title}</p>
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">{title}</p>
         {Icon && (
-          <div className="p-2 rounded-lg bg-slate-50 text-slate-500 border border-slate-100">
+          <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 border border-slate-100 dark:border-slate-700">
             <Icon size={18} />
           </div>
         )}
       </div>
       
       <div className="flex items-baseline gap-2">
-        <h3 className="text-3xl font-bold tracking-tight text-slate-900">{value}</h3>
+        <h3 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">{value}</h3>
         {subValue && <span className="text-sm font-medium text-slate-400">{subValue}</span>}
       </div>
       

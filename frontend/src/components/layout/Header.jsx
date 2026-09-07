@@ -62,7 +62,7 @@ const Header = ({ onReset, hasData, onSelectSample, filename }) => {
             />
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">InsightX</span>
+                <span className="font-extrabold text-xl tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">InsightX</span>
                 <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/80">
                   AI Analyst
                 </span>
@@ -75,25 +75,25 @@ const Header = ({ onReset, hasData, onSelectSample, filename }) => {
         <nav className="hidden lg:flex items-center justify-center gap-2 flex-1">
           <button
             onClick={() => { onReset(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-            className="px-3.5 py-1.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
+            className="px-4 py-2 rounded-lg text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
           >
             Home
           </button>
           <button
             onClick={() => scrollToSection('samples')}
-            className="px-3.5 py-1.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
+            className="px-4 py-2 rounded-lg text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
           >
             Datasets
           </button>
           <button
             onClick={() => scrollToSection('capabilities')}
-            className="px-3.5 py-1.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
+            className="px-4 py-2 rounded-lg text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
           >
             Capabilities
           </button>
           <button
             onClick={() => scrollToSection('faqs')}
-            className="px-3.5 py-1.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
+            className="px-4 py-2 rounded-lg text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
           >
             FAQs
           </button>
@@ -101,10 +101,10 @@ const Header = ({ onReset, hasData, onSelectSample, filename }) => {
             href="http://localhost:8000/docs"
             target="_blank"
             rel="noreferrer"
-            className="px-3.5 py-1.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors flex items-center gap-1"
+            className="px-4 py-2 rounded-lg text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors flex items-center gap-1.5"
           >
             <span>API Docs</span>
-            <ExternalLink size={12} className="opacity-60" />
+            <ExternalLink size={14} className="opacity-60" />
           </a>
         </nav>
 

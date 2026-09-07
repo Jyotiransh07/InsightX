@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Configure Tailwind v4 class-based dark mode strategy */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
@@ -68,57 +71,28 @@ h1, h2, h3, h4, h5, h6 {
   color: #0f172a;
 }
 
-h1,
-.hero-headline,
-.hero-headline span {
-  color: #000000;
-  -webkit-text-fill-color: #000000;
-}
-
-/* Dark Theme: All headings become brilliant pure white throughout the site */
+/* Dark Theme: All headings are crisp, radiant pure white */
 html.dark h1,
 html.dark h2,
 html.dark h3,
 html.dark h4,
 html.dark h5,
-html.dark h6,
-html.dark .hero-headline,
-html.dark .hero-headline span,
-html.dark .hero-headline * {
+html.dark h6 {
   color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  background-image: none !important;
 }
 
-/* Primary text & descriptions in Dark Theme - Crisp Light Silver */
+/* Ensure colorful gradient headlines stay vibrant and transparent */
+.bg-clip-text.text-transparent,
+.text-transparent {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* Primary text & descriptions in Dark Theme */
 html.dark p,
 html.dark span.text-slate-600,
 html.dark span.text-slate-500 {
-  color: #cbd5e1 !important;
-}
-
-html.dark .text-slate-900 {
-  color: #ffffff !important;
-}
-
-html.dark .text-slate-800 {
-  color: #f1f5f9 !important;
-}
-
-html.dark .text-slate-700 {
-  color: #e2e8f0 !important;
-}
-
-html.dark .text-slate-600 {
-  color: #cbd5e1 !important;
-}
-
-html.dark .text-slate-500 {
-  color: #94a3b8 !important;
-}
-
-html.dark .text-slate-400 {
-  color: #94a3b8 !important;
+  color: #cbd5e1;
 }
 
 /* Cards & Panels in Dark Theme */
