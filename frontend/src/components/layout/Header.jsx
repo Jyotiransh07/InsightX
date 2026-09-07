@@ -1,27 +1,67 @@
-import React from 'react';
-import { BarChart2, FileText, Printer, RefreshCw, Sparkles } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { BarChart2, Printer, RefreshCw, Sparkles, Sun, Moon, ExternalLink } from 'lucide-react';
 
 const Header = ({ onReset, hasData, onSelectSample, filename }) => {
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    // Check initial preference - default to light
+    const savedTheme = localStorage.getItem('insightx_theme');
+    if (savedTheme === 'dark') {
+      setIsDark(true);
+      document.documentElement.classList.add('dark');
+    } else {
+      setIsDark(false);
+      document.documentElement.classList.remove('dark');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    if (isDark) {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('insightx_theme', 'light');
+      setIsDark(false);
+    } else {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('insightx_theme', 'dark');
+      setIsDark(true);
+    }
+  };
+
   const printReport = () => {
     window.print();
   };
 
+  const scrollToSection = (id) => {
+    if (hasData) {
+      onReset();
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        el?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      const el = document.getElementById(id);
+      el?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <header className="sticky top-0 z-40 w-full bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-xs">
+    <header className="sticky top-0 z-40 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-xs transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Brand */}
-        <div className="flex items-center gap-3">
+        
+        {/* Left: Brand Logo */}
+        <div className="flex items-center w-auto lg:w-1/4">
           <div 
-            onClick={onReset}
+            onClick={() => { onReset(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
             className="flex items-center gap-2.5 cursor-pointer group"
           >
-            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-xs group-hover:bg-blue-700 transition-colors">
-              <BarChart2 size={19} className="text-white" />
+            <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-xs group-hover:bg-blue-700 transition-colors">
+              <BarChart2 size={20} className="text-white" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-bold text-lg tracking-tight text-slate-900">InsightX</span>
-                <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                <span className="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">InsightX</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/80">
                   AI Analyst
                 </span>
               </div>
@@ -29,56 +69,84 @@ const Header = ({ onReset, hasData, onSelectSample, filename }) => {
           </div>
         </div>
 
-        {/* Quick Sample Selector if on upload screen or header */}
-        <div className="hidden md:flex items-center gap-2 text-xs">
-          <span className="text-slate-400 font-medium">Try sample:</span>
+        {/* Center: Centered Navigation Menu Links */}
+        <nav className="hidden lg:flex items-center justify-center gap-2 flex-1">
           <button
-            onClick={() => onSelectSample('ecommerce')}
-            className="px-2.5 py-1 rounded-full border border-slate-200 bg-white text-slate-600 hover:border-blue-300 hover:text-blue-700 hover:bg-blue-50/50 transition-colors font-medium cursor-pointer"
+            onClick={() => { onReset(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            className="px-3.5 py-1.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
           >
-            E-commerce
+            Home
           </button>
           <button
-            onClick={() => onSelectSample('saas')}
-            className="px-2.5 py-1 rounded-full border border-slate-200 bg-white text-slate-600 hover:border-blue-300 hover:text-blue-700 hover:bg-blue-50/50 transition-colors font-medium cursor-pointer"
+            onClick={() => scrollToSection('samples')}
+            className="px-3.5 py-1.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
           >
-            SaaS Metrics
+            Datasets
           </button>
           <button
-            onClick={() => onSelectSample('hr')}
-            className="px-2.5 py-1 rounded-full border border-slate-200 bg-white text-slate-600 hover:border-blue-300 hover:text-blue-700 hover:bg-blue-50/50 transition-colors font-medium cursor-pointer"
+            onClick={() => scrollToSection('capabilities')}
+            className="px-3.5 py-1.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
           >
-            HR Workforce
+            Capabilities
           </button>
-        </div>
+          <button
+            onClick={() => scrollToSection('faqs')}
+            className="px-3.5 py-1.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
+          >
+            FAQs
+          </button>
+          <a
+            href="http://localhost:8000/docs"
+            target="_blank"
+            rel="noreferrer"
+            className="px-3.5 py-1.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors flex items-center gap-1"
+          >
+            <span>API Docs</span>
+            <ExternalLink size={12} className="opacity-60" />
+          </a>
+        </nav>
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-2.5">
+        {/* Right: Actions & Dark/Light Theme Switcher */}
+        <div className="flex items-center justify-end gap-3 w-auto lg:w-1/4">
+          {/* Theme Toggle Button */}
+          <button
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-amber-400 transition-colors cursor-pointer shadow-2xs"
+            title={isDark ? "Switch to Light Theme" : "Switch to Dark Theme"}
+          >
+            {isDark ? (
+              <Sun size={18} className="text-amber-400" />
+            ) : (
+              <Moon size={18} className="text-slate-600" />
+            )}
+          </button>
+
           {hasData && (
             <>
               <button
                 onClick={printReport}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-2xs transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold shadow-2xs transition-colors cursor-pointer"
                 title="Print or Save PDF"
               >
-                <Printer size={14} />
+                <Printer size={15} />
                 <span className="hidden sm:inline">Export PDF</span>
               </button>
 
               <button
                 onClick={onReset}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition-colors cursor-pointer"
               >
-                <RefreshCw size={13} />
+                <RefreshCw size={14} />
                 <span>New Dataset</span>
               </button>
             </>
           )}
 
           {!hasData && (
-            <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
-              <Sparkles size={14} className="text-blue-600" />
-              <span>Free, Instant, Verified</span>
+            <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 font-medium">
+              <Sparkles size={14} className="text-blue-500" />
+              <span>Verified Engine</span>
             </div>
           )}
         </div>

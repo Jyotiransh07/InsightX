@@ -186,6 +186,26 @@ async def get_sample_data(sample_type: str):
             "Attrition_Risk": attrition_risk
         })
         filename = "hr_workforce_sample.csv"
+    elif sample_type == "healthcare":
+        ages = np.random.randint(21, 85, size=n)
+        bp_systolic = np.random.normal(loc=125, scale=18, size=n).clip(90, 195).round(0)
+        glucose = np.random.normal(loc=105, scale=25, size=n).clip(65, 260).round(1)
+        bmi = np.random.normal(loc=26.5, scale=4.8, size=n).clip(18.0, 44.0).round(1)
+        conditions = np.random.choice(["Hypertension", "Diabetes", "Cardiovascular", "Routine"], size=n, p=[0.25, 0.20, 0.15, 0.40])
+        stay_days = np.random.poisson(lam=3.5, size=n).clip(1, 14)
+        readmitted = np.random.choice(["No", "Yes"], size=n, p=[0.82, 0.18])
+        
+        df = pd.DataFrame({
+            "Patient_ID": [f"PAT-{8000+i}" for i in range(n)],
+            "Age": ages,
+            "Primary_Condition": conditions,
+            "Systolic_BP": bp_systolic,
+            "Fasting_Glucose": glucose,
+            "BMI": bmi,
+            "Stay_Duration_Days": stay_days,
+            "30_Day_Readmission": readmitted
+        })
+        filename = "patient_clinical_vitals.csv"
     else:
         # Default sample
         dates = pd.date_range(start="2024-01-01", periods=60, freq="D")

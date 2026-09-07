@@ -56,7 +56,7 @@ const AskAIPanel = ({ metadata, analytics }) => {
             <MessageSquare size={18} />
           </div>
           <div>
-            <h3 className="text-base font-semibold text-slate-900 tracking-tight">Ask in Plain English</h3>
+            <h3 className="text-base font-semibold text-slate-900 dark:text-white tracking-tight">Ask in Plain English</h3>
             <p className="text-xs text-slate-500">The AI answers questions by querying your dataset directly</p>
           </div>
         </div>
