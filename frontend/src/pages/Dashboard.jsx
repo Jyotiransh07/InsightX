@@ -25,10 +25,28 @@ const UploadScreen = ({ onUploadStart, onUploadSuccess, onUploadError, onSampleS
     formData.append('file', file);
 
     try {
-      const response = await axios.post('/api/v1/upload', formData);
-      setTimeout(() => onUploadSuccess(response.data), 800);
+      let response;
+      try {
+        response = await axios.post('/api/v1/upload', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+      } catch (err1) {
+        response = await axios.post('http://localhost:8000/api/v1/upload', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+      }
+      setTimeout(() => onUploadSuccess(response.data), 400);
     } catch (error) {
-      onUploadError(error.response?.data?.detail || 'An error occurred while processing the dataset.');
+      console.error('Upload error:', error);
+      let errMsg = 'An error occurred while processing the dataset.';
+      if (error.response?.data?.detail) {
+        errMsg = typeof error.response.data.detail === 'string'
+          ? error.response.data.detail
+          : JSON.stringify(error.response.data.detail);
+      } else if (error.message) {
+        errMsg = error.message;
+      }
+      onUploadError(errMsg);
     }
   };
 
@@ -150,7 +168,8 @@ const UploadScreen = ({ onUploadStart, onUploadSuccess, onUploadError, onSampleS
         >
           <input 
             type="file" 
-            accept=".csv, .xlsx, .xls, .json, .tsv"
+            accept=".csv, .xlsx, .xls, .json, .tsv, .tab, text/csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            onClick={(e) => { e.target.value = null; }}
             onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
           />
@@ -373,12 +392,20 @@ const ProcessingScreen = () => {
 };
 
 const DashboardView = ({ data, onReset }) => {
-  const { metadata, data_quality, charts, insights, analytics, explorer_data, filename } = data;
+  const { 
+    metadata = {}, 
+    data_quality = {}, 
+    charts = [], 
+    insights = [], 
+    analytics = {}, 
+    explorer_data = [], 
+    filename = 'Dataset' 
+  } = data || {};
   const [activeSegmentFilter, setActiveSegmentFilter] = useState('all');
 
   // Find categorical columns to provide dynamic segment filtering
   const categoricalCols = useMemo(() => {
-    return metadata.columns?.filter(c => c.type === 'categorical') || [];
+    return metadata?.columns?.filter(c => c.type === 'categorical') || [];
   }, [metadata]);
 
   // Extract distinct values from the first categorical column
@@ -584,8 +611,13 @@ const Dashboard = () => {
   const handleSampleSelect = async (sampleType) => {
     handleUploadStart();
     try {
-      const response = await axios.get(`/api/v1/sample/${sampleType}`);
-      setTimeout(() => handleUploadSuccess(response.data), 800);
+      let response;
+      try {
+        response = await axios.get(`/api/v1/sample/${sampleType}`);
+      } catch {
+        response = await axios.get(`http://localhost:8000/api/v1/sample/${sampleType}`);
+      }
+      setTimeout(() => handleUploadSuccess(response.data), 400);
     } catch (err) {
       handleUploadError("Failed to generate sample dataset analysis.");
     }

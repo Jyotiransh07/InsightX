@@ -4,10 +4,10 @@ from api import upload
 
 app = FastAPI(title="InsightX API")
 
-# Setup CORS
+# Setup CORS - Allow all origins and local dev ports
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins (Vercel, localhost, etc.)
+    allow_origin_regex=r".*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -22,4 +22,3 @@ app.include_router(upload.router, prefix="/v1")
 @app.get("/api/health")
 def root():
     return {"message": "InsightX API is running", "status": "ok"}
-

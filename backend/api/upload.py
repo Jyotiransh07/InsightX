@@ -42,9 +42,29 @@ def sanitize_for_json(obj):
         return None
     return obj
 
+def make_unique_columns(df: pd.DataFrame) -> pd.DataFrame:
+    cols = []
+    seen = {}
+    for idx, c in enumerate(df.columns):
+        c_str = str(c).strip() if str(c).strip() else f"column_{idx+1}"
+        if c_str in seen:
+            seen[c_str] += 1
+            cols.append(f"{c_str}_{seen[c_str]}")
+        else:
+            seen[c_str] = 0
+            cols.append(c_str)
+    df.columns = cols
+    return df
+
 def process_dataframe(df: pd.DataFrame, filename: str):
+    # Drop empty rows and columns
+    df = df.dropna(how="all").dropna(axis=1, how="all")
+    
     if df.empty or len(df) == 0:
-        raise ValueError("The uploaded dataset contains no rows.")
+        raise ValueError("The uploaded dataset contains no readable data rows.")
+        
+    # Ensure column names are clean unique strings
+    df = make_unique_columns(df)
         
     # 1. Profile Raw Data
     raw_profiling = profile_dataset(df)
@@ -55,15 +75,34 @@ def process_dataframe(df: pd.DataFrame, filename: str):
     # 3. Profile Cleaned Data
     clean_profiling = profile_dataset(cleaned_df)
     
-    # 4. Analytics Engine
+    # 4. Analytics Engine (resilient to edge cases)
     analytics_results = {}
-    analytics_results["statistics"] = calculate_descriptive_stats(cleaned_df, clean_profiling)
-    analytics_results["correlation"] = calculate_correlations(cleaned_df, clean_profiling)
-    analytics_results["outliers"] = detect_outliers(cleaned_df, clean_profiling)
-    analytics_results["clusters"] = perform_clustering(cleaned_df, clean_profiling)
-    analytics_results["trends"] = analyze_trends(cleaned_df, clean_profiling)
+    try:
+        analytics_results["statistics"] = calculate_descriptive_stats(cleaned_df, clean_profiling)
+    except Exception as e:
+        analytics_results["statistics"] = []
+
+    try:
+        analytics_results["correlation"] = calculate_correlations(cleaned_df, clean_profiling)
+    except Exception as e:
+        analytics_results["correlation"] = {"matrix": [], "strongest_positive": None, "strongest_negative": None}
+
+    try:
+        analytics_results["outliers"] = detect_outliers(cleaned_df, clean_profiling)
+    except Exception as e:
+        analytics_results["outliers"] = {"total_anomalies": 0, "affected_columns": [], "sample_records": []}
+
+    try:
+        analytics_results["clusters"] = perform_clustering(cleaned_df, clean_profiling)
+    except Exception as e:
+        analytics_results["clusters"] = {"status": "skipped", "reason": str(e), "clusters": []}
+
+    try:
+        analytics_results["trends"] = analyze_trends(cleaned_df, clean_profiling)
+    except Exception as e:
+        analytics_results["trends"] = {"status": "skipped", "reason": str(e), "trends": []}
     
-    # 5. Visualization Recommendation with real data
+    # 5. Visualization Recommendation with guaranteed charts
     charts = recommend_visualizations(cleaned_df, clean_profiling, analytics_results)
     
     # 6. Insight Generation
@@ -71,7 +110,6 @@ def process_dataframe(df: pd.DataFrame, filename: str):
     
     # 7. Data Explorer Payload (First 100 rows preview)
     preview_df = cleaned_df.head(100).copy()
-    # Convert dates/objects to string for clean serialization
     for col in preview_df.columns:
         if pd.api.types.is_datetime64_any_dtype(preview_df[col]):
             preview_df[col] = preview_df[col].astype(str)
@@ -96,26 +134,60 @@ def process_dataframe(df: pd.DataFrame, filename: str):
 async def upload_file(file: UploadFile = File(...)):
     try:
         content = await file.read()
+        if not content:
+            raise HTTPException(status_code=400, detail="The uploaded file is empty.")
+            
         filename = file.filename or "dataset.csv"
+        filename_lower = filename.lower()
         
-        if filename.endswith(".csv"):
+        df = None
+        if filename_lower.endswith(".csv"):
+            # Try sniffing delimiter first (handles comma, semicolon, tab, pipe)
+            for parse_fn in [
+                lambda: pd.read_csv(io.BytesIO(content), sep=None, engine="python"),
+                lambda: pd.read_csv(io.BytesIO(content), encoding="utf-8-sig"),
+                lambda: pd.read_csv(io.BytesIO(content), encoding="latin1"),
+                lambda: pd.read_csv(io.BytesIO(content), sep=";", encoding="latin1"),
+            ]:
+                try:
+                    df = parse_fn()
+                    if df is not None and not df.empty:
+                        break
+                except Exception:
+                    continue
+        elif filename_lower.endswith((".xls", ".xlsx")):
             try:
-                df = pd.read_csv(io.BytesIO(content))
-            except UnicodeDecodeError:
-                df = pd.read_csv(io.BytesIO(content), encoding="latin1")
-        elif filename.endswith((".xls", ".xlsx")):
-            df = pd.read_excel(io.BytesIO(content))
-        elif filename.endswith(".json"):
-            df = pd.read_json(io.BytesIO(content))
-        elif filename.endswith((".tsv", ".tab")):
+                df = pd.read_excel(io.BytesIO(content))
+            except Exception as ex:
+                raise HTTPException(status_code=400, detail=f"Failed to read Excel file: {str(ex)}")
+        elif filename_lower.endswith(".json"):
+            try:
+                df = pd.read_json(io.BytesIO(content))
+            except Exception:
+                try:
+                    data = json.loads(content.decode("utf-8"))
+                    df = pd.json_normalize(data)
+                except Exception as ex:
+                    raise HTTPException(status_code=400, detail=f"Failed to read JSON dataset: {str(ex)}")
+        elif filename_lower.endswith((".tsv", ".tab")):
             df = pd.read_csv(io.BytesIO(content), sep="\t")
         else:
-            # Attempt CSV parsing fallback
-            try:
-                df = pd.read_csv(io.BytesIO(content))
-            except Exception:
-                raise HTTPException(status_code=400, detail="Unsupported file format. Please upload CSV, Excel, or JSON.")
-                
+            # Fallback for other text formats
+            for parse_fn in [
+                lambda: pd.read_csv(io.BytesIO(content), sep=None, engine="python"),
+                lambda: pd.read_excel(io.BytesIO(content)),
+                lambda: pd.read_json(io.BytesIO(content)),
+            ]:
+                try:
+                    df = parse_fn()
+                    if df is not None and not df.empty:
+                        break
+                except Exception:
+                    continue
+                    
+        if df is None:
+            raise HTTPException(status_code=400, detail="Unsupported or unreadable file format. Please upload a valid CSV, Excel (.xlsx/.xls), or JSON dataset.")
+            
         return process_dataframe(df, filename)
         
     except HTTPException:

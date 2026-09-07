@@ -28,8 +28,8 @@ def calculate_correlations(df: pd.DataFrame, profiling_metadata: dict) -> dict:
     # Find strongest correlations (ignoring self correlation 1.0)
     strongest_pos = None
     strongest_neg = None
-    max_pos = -1
-    min_neg = 1
+    max_pos = 0.0
+    min_neg = 0.0
     
     for i in range(len(corr_df.columns)):
         for j in range(i+1, len(corr_df.columns)):
