@@ -14,9 +14,7 @@ const Sidebar = () => {
   return (
     <div className="w-64 h-screen bg-surface border-r border-white/10 p-4 flex flex-col hidden md:flex">
       <div className="flex items-center gap-3 mb-10 px-2 mt-4">
-        <div className="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(59,130,246,0.5)]">
-          IX
-        </div>
+        <img src="/logo.png" alt="InsightX Logo" className="h-8 w-auto object-contain drop-shadow-sm" />
         <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
           InsightX
         </h1>

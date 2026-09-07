@@ -667,9 +667,16 @@ const Dashboard = () => {
         )}
       </main>
 
-      <footer className="border-t border-slate-200/80 bg-white/85 backdrop-blur-xs py-8 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 text-center text-sm text-slate-500 font-medium">
-          InsightX Automated Insight Analyst · Built for Autonomous Discovery on Unseen Datasets
+      <footer className="border-t border-slate-200/80 dark:border-slate-800 bg-white/85 dark:bg-slate-900/85 backdrop-blur-xs py-8 mt-auto">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left text-sm text-slate-500 dark:text-slate-400 font-medium">
+          <div className="flex items-center gap-2.5">
+            <img src="/logo.png" alt="InsightX Logo" className="h-7 w-auto object-contain drop-shadow-xs" />
+            <span className="font-bold text-slate-800 dark:text-slate-200">InsightX</span>
+            <span className="text-xs text-slate-400">· Autonomous Data Intelligence</span>
+          </div>
+          <div className="text-xs text-slate-400">
+            Automated Insight Analyst · Built for Autonomous Discovery on Unseen Datasets
+          </div>
         </div>
       </footer>
     </div>

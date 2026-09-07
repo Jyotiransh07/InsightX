@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart2, Printer, RefreshCw, Sparkles, Sun, Moon, ExternalLink } from 'lucide-react';
+import { Printer, RefreshCw, Sparkles, Sun, Moon, ExternalLink } from 'lucide-react';
 
 const Header = ({ onReset, hasData, onSelectSample, filename }) => {
   const [isDark, setIsDark] = useState(false);
@@ -55,9 +55,11 @@ const Header = ({ onReset, hasData, onSelectSample, filename }) => {
             onClick={() => { onReset(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
             className="flex items-center gap-2.5 cursor-pointer group"
           >
-            <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-xs group-hover:bg-blue-700 transition-colors">
-              <BarChart2 size={20} className="text-white" />
-            </div>
+            <img 
+              src="/logo.png" 
+              alt="InsightX Logo" 
+              className="h-10 w-auto object-contain transition-transform duration-200 group-hover:scale-105 drop-shadow-xs" 
+            />
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">InsightX</span>
