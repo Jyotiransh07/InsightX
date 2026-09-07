@@ -25,9 +25,7 @@ const UploadScreen = ({ onUploadStart, onUploadSuccess, onUploadError, onSampleS
     formData.append('file', file);
 
     try {
-      const response = await axios.post('http://localhost:8000/api/v1/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
+      const response = await axios.post('http://localhost:8000/api/v1/upload', formData);
       setTimeout(() => onUploadSuccess(response.data), 800);
     } catch (error) {
       onUploadError(error.response?.data?.detail || 'An error occurred while processing the dataset.');
